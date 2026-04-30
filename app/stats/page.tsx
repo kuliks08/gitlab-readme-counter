@@ -1,7 +1,7 @@
 import { parseBool, pickTheme, pickUsername } from "@/lib/query/commonOptions";
 import { parseCustomTitle } from "@/lib/query/customTitle";
 import { resolveTheme } from "@/lib/render/theme";
-import { loadGitLabStats } from "@/lib/stats/loadGitLabStats";
+import { loadGitLabStatsCached } from "@/lib/cache/cachedGitLabStats";
 import { InteractiveStatsCard } from "./interactive-stats-card";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +53,7 @@ export default async function StatsPage({
     );
   }
 
-  const loaded = await loadGitLabStats(username);
+  const loaded = await loadGitLabStatsCached(username);
   if (!loaded.ok) {
     const msg =
       loaded.error === "not_found"

@@ -2,11 +2,12 @@ export const CACHE_OK = 1800;
 export const CACHE_ERR = 60;
 
 export function svgResponse(svgBody: string, maxAgeSeconds: number): Response {
+  const swr = Math.min(maxAgeSeconds * 2, 86_400);
   return new Response(svgBody, {
     status: 200,
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",
-      "Cache-Control": `public, max-age=${maxAgeSeconds}`,
+      "Cache-Control": `public, max-age=${maxAgeSeconds}, s-maxage=${maxAgeSeconds}, stale-while-revalidate=${swr}`,
     },
   });
 }

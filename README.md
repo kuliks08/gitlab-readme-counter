@@ -14,6 +14,26 @@
 
 Публичный деплой этого репозитория на Vercel: **`https://gitlab-readme-counter.vercel.app`**. В примерах ниже используется он; для своего форка замените хост на свой домен. В качестве иллюстрации везде указан ник **`gitlab-bot`** — замените на свой логин GitLab.com.
 
+## Живые примеры карточек
+
+Ниже те же эндпоинты, что в таблицах: изображения грузятся с деплоя как обычные картинки в README. Если превью не видно (блокировка сети или кэш), откройте URL из примеров в браузере.
+
+**Статистика — тема default**
+
+![GitLab stats — default](https://gitlab-readme-counter.vercel.app/api?username=gitlab-bot)
+
+**Статистика — Tokyo Night, без рамки, с иконками**
+
+![GitLab stats — tokyonight, icons](https://gitlab-readme-counter.vercel.app/api?username=gitlab-bot&theme=tokyonight&hide_border=true&show_icons=true)
+
+**Топ языков — обычный layout**
+
+![Top Langs — normal](https://gitlab-readme-counter.vercel.app/api/top-langs?username=gitlab-bot)
+
+**Топ языков — compact, Tokyo Night**
+
+![Top Langs — compact](https://gitlab-readme-counter.vercel.app/api/top-langs?username=gitlab-bot&layout=compact&theme=tokyonight&hide_border=true)
+
 ### `/api` — карточка статистики (SVG)
 
 | Параметр | Обязательный | По умолчанию | Описание |
@@ -114,6 +134,7 @@ https://gitlab-readme-counter.vercel.app/stats?username=gitlab-bot&custom_title=
 | Переменная | Описание |
 |------------|-----------|
 | `GITLAB_TOKEN` | **Опционально** в настройках Vercel. Серверный токен: передаётся в запросах как заголовок `PRIVATE-TOKEN`, **не попадает в URL** и недоступен клиентам. Удобно при своих лимитах или доступе к тем данным API, которые требуют авторизации. |
+| `STATS_DATA_REVALIDATE_SECONDS` | **Опционально.** Интервал в секундах (от **60** до **86400**), с которым сервер **повторно ходит в GitLab** для одного и того же пользователя. По умолчанию **600** (10 минут): повторные запросы `/api`, `/api/top-langs` и `/stats` берут данные из кэша Next.js и реже нагружают GitLab. |
 
 Параметр **`count_private`** в духе github-readme-stats **пока не реализован**; без серверного токена доступны только публичные ответы API. Когда поддержка приватной статистики появится, она будет иметь смысл только совместно с `GITLAB_TOKEN` на вашем деплое (никогда не подставляйте токен в query-параметры).
 

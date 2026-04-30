@@ -4,7 +4,7 @@ import { parseCustomTitle } from "@/lib/query/customTitle";
 import { renderErrorCardSvg } from "@/lib/render/errorCardSvg";
 import { renderGitLabStatsCardSvg } from "@/lib/render/gitlabStatsCardSvg";
 import { resolveTheme } from "@/lib/render/theme";
-import { loadGitLabStats } from "@/lib/stats/loadGitLabStats";
+import { loadGitLabStatsCached } from "@/lib/cache/cachedGitLabStats";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -32,7 +32,7 @@ export async function GET(request: Request): Promise<Response> {
   const showIcons = parseBool(sp, "show_icons", false);
   const customTitle = parseCustomTitle(sp);
 
-  const loaded = await loadGitLabStats(username);
+  const loaded = await loadGitLabStatsCached(username);
   if (!loaded.ok) {
     const message =
       loaded.error === "not_found" ? "User not found" : "GitLab API error";

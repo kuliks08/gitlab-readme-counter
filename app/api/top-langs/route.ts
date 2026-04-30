@@ -1,12 +1,5 @@
-import {
-  mergeLanguageMaps,
-  normalizePercents,
-  takeTop,
-} from "@/lib/aggregate/topLanguages";
-import { MAX_LANGUAGE_FETCH_PROJECTS } from "@/lib/gitlab/constants";
-import { fetchProjectLanguagesMany } from "@/lib/gitlab/projectLanguages";
-import { listUserProjectsWithStatus } from "@/lib/gitlab/projects";
-import { getUserByUsername } from "@/lib/gitlab/users";
+import { takeTop } from "@/lib/aggregate/topLanguages";
+import { loadTopLangsNormalizedCached } from "@/lib/cache/cachedTopLangs";
 import { CACHE_ERR, CACHE_OK, svgResponse } from "@/lib/http/svgResponse";
 import { parseBool, pickTheme, pickUsername } from "@/lib/query/commonOptions";
 import { parseLangsCount, parseTopLangLayout } from "@/lib/query/topLangsOptions";
@@ -38,12 +31,14 @@ export async function GET(request: Request): Promise<Response> {
   const theme = resolveTheme(pickTheme(sp));
   const hideBorder = parseBool(sp, "hide_border", false);
 
-  const user = await getUserByUsername(username);
-  if (!user) {
+  const data = await loadTopLangsNormalizedCached(username);
+  if (!data.ok) {
+    const message =
+      data.error === "not_found" ? "User not found" : "GitLab API error";
     return svgResponse(
       renderErrorCardSvg({
         title: "GitLab Top Languages",
-        message: "User not found",
+        message,
         theme,
         hideBorder,
       }),
@@ -51,25 +46,7 @@ export async function GET(request: Request): Promise<Response> {
     );
   }
 
-  const projectsResult = await listUserProjectsWithStatus(user.id);
-  if (!projectsResult.ok) {
-    return svgResponse(
-      renderErrorCardSvg({
-        title: "GitLab Top Languages",
-        message: "GitLab API error",
-        theme,
-        hideBorder,
-      }),
-      CACHE_ERR,
-    );
-  }
-
-  const slice = projectsResult.projects.slice(0, MAX_LANGUAGE_FETCH_PROJECTS);
-  const maps = await fetchProjectLanguagesMany(slice.map((p) => p.id));
-
-  const merged = mergeLanguageMaps(maps);
-  const normalized = normalizePercents(merged);
-  const top = takeTop(normalized, parseLangsCount(sp));
+  const top = takeTop(data.normalized, parseLangsCount(sp));
   const layout = parseTopLangLayout(sp);
 
   return svgResponse(
