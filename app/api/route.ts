@@ -30,6 +30,7 @@ export async function GET(request: Request): Promise<Response> {
   const theme = resolveTheme(pickTheme(sp));
   const hideBorder = parseBool(sp, "hide_border", false);
   const showIcons = parseBool(sp, "show_icons", false);
+  const animateHeatmap = parseBool(sp, "animate", false);
   const customTitle = parseCustomTitle(sp);
 
   const loaded = await loadGitLabStatsCached(username);
@@ -58,6 +59,7 @@ export async function GET(request: Request): Promise<Response> {
       hideBorder,
       showIcons,
       customTitle,
+      animateHeatmap,
     }),
     CACHE_OK,
   );

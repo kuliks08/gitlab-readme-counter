@@ -84,4 +84,28 @@ describe("renderGitLabStatsCardSvg", () => {
     expect(svg).toContain("99");
     expect(svg).not.toContain('<rect class="hm-r"');
   });
+
+  it("при animateHeatmap — анимация ячеек и тень карточки", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2025-06-15T12:00:00Z"));
+
+    const svg = renderGitLabStatsCardSvg({
+      username: "testuser",
+      name: "",
+      projectCount: 0,
+      starsTotal: 0,
+      profileCalendar: {
+        byDate: { "2025-06-10": 8 },
+        total: 42,
+      },
+      theme,
+      hideBorder: false,
+      showIcons: false,
+      animateHeatmap: true,
+    });
+    expect(svg).toContain("@keyframes hm-pop");
+    expect(svg).toContain("feDropShadow");
+    expect(svg).toContain('<rect class="hm-r"');
+    expect(svg).toContain('filter="url(#soft_testuser)"');
+  });
 });

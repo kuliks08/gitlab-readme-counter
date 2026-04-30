@@ -42,6 +42,7 @@
 | `theme` | нет | `default` | Тема оформления (см. [Темы](#темы)) |
 | `hide_border` | нет | `false` | Скрыть рамку карточки |
 | `show_icons` | нет | `false` | Показать иконки у строк статистики |
+| `animate` | нет | `false` | Анимация теплокарты и тень карточки (`feDropShadow`). Для встраивания в **GitHub README** оставляйте выключенным — иначе превью может не показываться. |
 | `custom_title` | нет | — | Свой заголовок карточки (лучше передавать в URL в закодированном виде, см. примеры) |
 
 Логические параметры (`hide_border`, `show_icons`): истина — `1`, `true`, `yes`, `y`, `on`; ложь — `0`, `false`, `no`, `n`, `off`; пустое значение или неизвестное слово — берётся значение по умолчанию.
@@ -53,6 +54,7 @@ https://gitlab-readme-counter.vercel.app/api?username=gitlab-bot
 https://gitlab-readme-counter.vercel.app/api?user=gitlab-bot&theme=tokyonight&hide_border=true
 https://gitlab-readme-counter.vercel.app/api?username=gitlab-bot&show_icons=true
 https://gitlab-readme-counter.vercel.app/api?username=gitlab-bot&custom_title=Моя%20статистика
+https://gitlab-readme-counter.vercel.app/api?username=gitlab-bot&animate=true
 ```
 
 Вставка в README как картинка:
