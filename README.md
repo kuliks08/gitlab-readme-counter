@@ -26,6 +26,10 @@
 
 ![GitLab stats — tokyonight, icons](https://gitlab-readme-counter.vercel.app/api?username=gitlab-bot&theme=tokyonight&hide_border=true&show_icons=true)
 
+**Статистика — с анимацией теплокарты и тенью** (`animate=true`; в GitHub README превью может не появиться — откройте ссылку в браузере)
+
+![GitLab stats — animated heatmap](https://gitlab-readme-counter.vercel.app/api?username=gitlab-bot&animate=true)
+
 **Топ языков — обычный layout**
 
 ![Top Langs — normal](https://gitlab-readme-counter.vercel.app/api/top-langs?username=gitlab-bot)
