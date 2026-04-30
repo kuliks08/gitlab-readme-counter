@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# env / logs
+.env*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vercel (локальная привязка проекта)
+.vercel/
+
+# Внутренняя документация и планы — не для публичного репозитория
+/docs/
+
+# IDE и локальные правила ассистентов
+.idea/
+.cursor/
+.cursorrules
+*.swp
+*.swo
