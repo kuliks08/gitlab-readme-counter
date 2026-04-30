@@ -97,24 +97,6 @@ export function renderGitLabStatsCardSvg(opts: {
     profileCalendar !== null &&
     Object.keys(profileCalendar.byDate).length > 0;
 
-  const heatmapStyleBlock = showHeatmap
-    ? `<style>
-@keyframes hm-pop {
-  from { opacity: 0; transform: scale(0.35); }
-  to { opacity: 1; transform: scale(1); }
-}
-.hm-r {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: hm-pop 0.45s cubic-bezier(0.34, 1.35, 0.64, 1) forwards;
-  opacity: 0;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hm-r { animation: none !important; opacity: 1 !important; }
-}
-</style>`
-    : "";
-
   /** Отдельная строка «Contributions», только если нет теплокарты (есть только число). */
   const showContributionsRowOnly =
     !showHeatmap &&
@@ -185,7 +167,6 @@ export function renderGitLabStatsCardSvg(opts: {
     const maxC = maxHeatmapCount(columns);
 
     const rects: string[] = [];
-    let animIndex = 0;
     for (let col = 0; col < columns.length; col++) {
       const weekCol = columns[col]!;
       for (let row = 0; row < weekCol.length; row++) {
@@ -194,13 +175,11 @@ export function renderGitLabStatsCardSvg(opts: {
         const fill = cellFill(lvl, day.isFuture, pal);
         const x = hmX + col * (cell + gap);
         const y = hmTop + row * (cell + gap);
-        const delay = animIndex * 4;
-        animIndex += 1;
         const tip = escapeSvgText(cellHoverTitle(day.dateKey, day.count, day.isFuture));
         rects.push(
           `  <g>` +
             `\n    <title>${tip}</title>` +
-            `\n    <rect class="hm-r" x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" ry="2" fill="${fill}" style="animation-delay:${delay}ms"/>` +
+            `\n    <rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" ry="2" fill="${fill}"/>` +
             `\n  </g>`,
         );
       }
@@ -252,15 +231,11 @@ export function renderGitLabStatsCardSvg(opts: {
       <stop offset="0%" stop-color="${bg}" stop-opacity="1"/>
       <stop offset="100%" stop-color="${mixHex(bg, iconC, luminance(bg) < 0.42 ? 0.06 : 0.04)}" stop-opacity="1"/>
     </linearGradient>
-    <filter id="soft_${uid}" x="-8%" y="-8%" width="116%" height="116%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="${luminance(bg) < 0.42 ? 0.35 : 0.08}"/>
-    </filter>
   </defs>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_W}" height="${height}" viewBox="0 0 ${CARD_W} ${height}">
 ${defs}
-${heatmapStyleBlock}
-  <rect width="100%" height="100%" rx="${RX}" ry="${RX}" fill="url(#bg_${uid})"${strokeAttr} filter="url(#soft_${uid})"/>
+  <rect width="100%" height="100%" rx="${RX}" ry="${RX}" fill="url(#bg_${uid})"${strokeAttr}/>
   <text x="${PAD}" y="${PAD + titleSize - 2}" font-family="${FONT}" font-size="${titleSize}" font-weight="700" fill="${titleC}" letter-spacing="-0.02em">${titleEsc}</text>
 ${statsSvg}
 ${showHeatmap ? heatmapSvg : heatSubtitleSvg}

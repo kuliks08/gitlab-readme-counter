@@ -28,7 +28,9 @@ describe("renderGitLabStatsCardSvg", () => {
     });
     expect(svg).not.toContain("Total Projects");
     expect(svg).not.toContain("Total Stars");
-    expect(svg).toContain('<rect class="hm-r"');
+    expect(svg).not.toContain("@keyframes");
+    expect(svg).not.toContain("feDropShadow");
+    expect(svg).toContain('width="11" height="11"');
     expect(svg).toContain("Issues, merge requests, pushes, and comments.");
     expect(svg).toContain("<title>");
     expect(svg).toContain("contributions");
